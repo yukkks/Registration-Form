@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<index.html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,3 +52,50 @@
         <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required />
         <input type="email" id="email" name="email" placeholder="Email" required />
         <input type="text" id="prefecture" name="prefecture" placeholder="Prefecture" required />
+        <input type="text" id="city" name="city" placeholder="City" required />
+        <input type="text" id="streetAddress" name="streetAddress" placeholder="Street Address" required />
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbydCdywn8Al6PFysSHXmwI8cNIO5sE1KNj-LsNejATSDanXzsbV4pJHZTFrxnGYNE50/exec'; // Replace with your deployment URL
+        const form = document.getElementById('registrationForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = {
+                lastName: formData.get('lastName'),
+                firstName: formData.get('firstName'),
+                phoneNumber: formData.get('phoneNumber'),
+                email: formData.get('email'),
+                prefecture: formData.get('prefecture'),
+                city: formData.get('city'),
+                streetAddress: formData.get('streetAddress'),
+            };
+
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    alert('Registration successful!');
+                    form.reset();
+                } else {
+                    alert('Registration failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form.');
+            }
+        });
+    </script>
+</body>
+</html>
